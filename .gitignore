@@ -1,0 +1,15 @@
+# node_modules cho cả frontend + backend
+/frontend/node_modules/
+/backend/node_modules/
+
+# Ảnh upload từ Admin (không cần đẩy lên Git)
+backend/uploads/
+
+# Log truy cập server
+logs.txt
+
+# React build output
+frontend/build/
+
+# Môi trường
+.env
