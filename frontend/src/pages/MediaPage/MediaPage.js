@@ -29,8 +29,13 @@
 // export default MediaPage;
 export default function MediaPage() {
     return (
-        <div>
-            <h1>MediaPage</h1>
+        <div style={{ width: '100vw', height: '100vh', background:"black" }}>
+            <div className="text">
+            <h2 className="letter ">a</h2>
+            <h2 className="letter ">a</h2>
+            <h2 className="letter ">a</h2>
+            <h2 className="letter ">a</h2>
+            </div>
         </div>
     )
 }

@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 const MusicPlayer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
-    const audio = document.getElementById('bg-music');
+    const audioRef = useRef(null); // tạo tham chiếu đến thẻ <audio>
 
     const toggleMusic = () => {
-        if (!audio) return;
+        const audio = audioRef.current;
+        if (!audio) {
+            console.log("Không có âm thanh");
+            return;
+        }
+
         if (isPlaying) {
             audio.pause();
         } else {
@@ -16,16 +21,21 @@ const MusicPlayer = () => {
 
     return (
         <div className="music-toggle">
-            <audio id="bg-music" src="/assets/shared/music/baihatcmsn.mp3" preload="auto" loop></audio>
+            <audio
+                ref={audioRef}
+                id="bg-music"
+                src="/assets/shared/music/baihatcmsn.mp3"
+                preload="auto"
+                loop
+            ></audio>
 
-            <button onClick={toggleMusic}>
-                {isPlaying ?
-                    (<img className='nav-icon' id="pause-icon" src="assets/shared/img/volume-high-solid.svg" ></img>) :
-                    (<img className='nav-icon' id="play-icon" src="assets/shared/img/volume-xmark-solid.svg"></img>)
-                }
+            <button onClick={toggleMusic} className='btn'>
+                {isPlaying ? (
+                    <img className='nav-icon' id="pause-icon" src="assets/shared/img/volume-high-solid.svg" />
+                ) : (
+                    <img className='nav-icon' id="play-icon" src="assets/shared/img/volume-xmark-solid.svg" />
+                )}
             </button>
-
-
         </div>
     );
 };
