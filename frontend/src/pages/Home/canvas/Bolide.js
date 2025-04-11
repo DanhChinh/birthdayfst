@@ -1,5 +1,5 @@
 
-export class Comet {
+export class Bolide {
   constructor(width, height) {
     this.reset(width, height);
   }

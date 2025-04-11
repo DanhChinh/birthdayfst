@@ -1,7 +1,7 @@
 import { random, timestamp } from './helpers.js';
 import { Starfield } from './Starfield.js';
 import { Firework } from './Firework.js';
-import { Comet } from './Comet.js';
+import { Bolide } from './Bolide.js';
 
 export class Birthday {
   constructor(canvas, ctx) {
@@ -10,7 +10,7 @@ export class Birthday {
     this.fireworks = [];
     this.counter = 0;
     this.startTime = timestamp();
-    this.comets = [];
+    this.bolides = [];
     this.stars = new Starfield(100, canvas);
     this.resize();
   }
@@ -55,16 +55,16 @@ export class Birthday {
     this.stars.draw();
 
     if (elapsed >= 10 && elapsed <= 180) {
-      if (this.comets.length === 0) {
-        const cometCount = random(3, 9);
-        this.comets = Array.from({ length: cometCount }, () => new Comet(this.width, this.height));
+      if (this.bolides.length === 0) {
+        const bolideCount = random(5, 9);
+        this.bolides = Array.from({ length: bolideCount }, () => new Bolide(this.width, this.height));
       }
-      this.comets.forEach(comet => {
-        comet.update(delta, this.width, this.height);
-        comet.draw(this.ctx);
+      this.bolides.forEach(bolide => {
+        bolide.update(delta, this.width, this.height);
+        bolide.draw(this.ctx);
       });
     } else {
-      this.comets = [];
+      this.bolides = [];
     }
 
     this.ctx.globalCompositeOperation = 'lighter';

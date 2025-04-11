@@ -1,41 +1,93 @@
-// import React, { useEffect, useState } from 'react';
-// import { getImages } from '../api/image';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import axios from 'axios';
 
-// const MediaPage = () => {
-//     const [images, setImages] = useState([]);
+const MediaPage = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
-//     useEffect(() => {
-//         getImages()
-//             .then(res => setImages(res.data))
-//             .catch(err => console.error('Lỗi tải ảnh:', err));
-//     }, []);
+    const [imageList, setImageList] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
-//     return (
-//         <div className="container py-5">
-//             <h2 className="text-center mb-4">Thư viện ảnh</h2>
-//             <div className="row g-4">
-//                 {images.map((img) => (
-//                     <div className="col-6 col-md-3" key={img.id}>
-//                         <div className="card">
-//                             <img src={img.url} className="card-img-top" alt="img" />
-//                         </div>
-//                     </div>
-//                 ))}
-//             </div>
-//         </div>
-//     );
-// };
+    // Lấy ảnh từ server
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/images');
+                setImageList(response.data);
+            } catch (error) {
+                console.error('Lỗi khi lấy ảnh:', error);
+            }
+        };
 
-// export default MediaPage;
-export default function MediaPage() {
+        fetchImages();
+    }, []);
+
+    const handleImageClick = (image) => {
+        setSelectedImage(image);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => setShowModal(false);
+
+    const handleAddImage = () => {
+        if (user) {
+            navigate('/admin');
+        } else {
+            navigate('/login');
+        }
+    };
+
     return (
-        <div style={{ width: '100vw', height: '100vh', background:"black" }}>
-            <div className="text">
-            <h2 className="letter ">a</h2>
-            <h2 className="letter ">a</h2>
-            <h2 className="letter ">a</h2>
-            <h2 className="letter ">a</h2>
+        <div className="container mt-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2>Thư viện ảnh</h2>
+                <button className="btn btn-primary" onClick={handleAddImage}>+ Thêm ảnh</button>
             </div>
+
+            <div className="row">
+                {imageList.map((image) => (
+                    <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={image.id}>
+                        <div className="card h-100 shadow-sm">
+                            <img
+                                src={`http://localhost:5000${image.url}`}
+                                className="card-img-top"
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => handleImageClick(image)}
+                                alt="Ảnh"
+                            />
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Modal xem ảnh lớn */}
+            {showModal && (
+                <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Ảnh chi tiết</h5>
+                                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
+                            </div>
+                            <div className="modal-body text-center">
+                                <img
+                                    src={`http://localhost:5000${selectedImage.url}`}
+                                    alt="Ảnh chi tiết"
+                                    className="img-fluid"
+                                />
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
+
+export default MediaPage;

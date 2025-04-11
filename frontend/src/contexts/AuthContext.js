@@ -5,16 +5,18 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-
+    
     const login = async (username, password) => {
         try {
+            console.log(username, password)
             const response = await axios.post('http://localhost:5000/api/login', {
                 username,
                 password
             });
 
+
             if (response.data.success) {
-                setUser(response.data.user); // Lưu thông tin người dùng
+                setUser(response.data.user); // Lưu thông tin người dùng  
                 return true;
             } else {
                 return false;
@@ -25,7 +27,10 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => setUser(null);
+    const logout = () => {
+        setUser(null);
+        // navigate('/media');
+    };
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>
@@ -34,4 +39,6 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export  const useAuth = () => useContext(AuthContext);
+
+

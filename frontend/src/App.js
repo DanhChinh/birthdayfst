@@ -8,6 +8,7 @@ import MediaPage from './pages/MediaPage/MediaPage';
 import Navbar from './components/Navbar';
 import './App.css';
 
+
 function App() {
   return (
     <AuthProvider>
